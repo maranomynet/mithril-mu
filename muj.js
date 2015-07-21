@@ -105,7 +105,7 @@ module.exports = function(m){
   for (var i=0, type; (type = domLevel0[i]); i++) {  skipEvents['on'+type] = true;  }
 
 
-  // Internal function to quickly bind/unbind DOM Level 2 events.
+  // Internal function to quickly bind DOM Level 2 events.
   var addEventListenerOnConfig = function (vElm, attr) {
           var evts = vElm.µEvents;
           if ( !evts )
@@ -156,7 +156,8 @@ module.exports = function(m){
           var vElm = m.apply(undefined, arguments);
           if ( tagName === null )
           {
-            // allow m(null, ...) to produce no element (instead of 'div')
+            // allow m(null, ...) to produce no wrapper element (instead of 'div')
+            // and only return its child-nodes as an Array.
             // https://github.com/lhorie/mithril.js/issues/723
             vElm = vElm.children;
           }
