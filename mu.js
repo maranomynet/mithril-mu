@@ -1,8 +1,8 @@
 /*
-  Mu is an unobtrusive, lightweight function wrapper for
-  mithril's `m()` function, and exposes a few utility functions.
+  µ (Mu) is an unobtrusive, lightweight function wrapper around
+  mithril's `m()` function. It also exposes a few utility functions.
 
-  `µ()` provides:
+  `µ()` is a drop-in replacement for `m()` adding these features:
     * Support for custom attribute transormations (similar to Barney Carroll's `mattr`)
       (add your own via `µ.attrs.customAttr = myTransformFn`)
     * Binds DOM events via `.addEventListener()` when neccessary.
