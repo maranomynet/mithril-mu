@@ -5,7 +5,7 @@
   `µ()` provides:
     * Support for custom attribute transormations (similar to Barney Carroll's `mattr`)
       (add your own via `µ.attrs.customAttr = myTransformFn`)
-    * Binds all (non-white-listed) DOM events via `.addEventListener()`.
+    * Binds DOM events via `.addEventListener()` when neccessary.
     * Allows opting-out of element wrapping via `µ( cond?'.wrapper':null, m('p','content') )`
 
   Utilities:
@@ -108,14 +108,6 @@ module.exports = function(m){
 
 
 
-  // FIXME: add more "safe-for-DOM-level-0" events to this list
-  var domLevel0 = ('click,dblclick,mouseover,mousedown,mousemove,focus,blur,'+
-                   'keyup,keydown,keypress,submit,reset,scroll,change').split(',');
-  // Look-up object with names of domLevel0 events that don't require .addEventListener() binding
-  var skipEvents = {};
-  for (var i=0, type; (type = domLevel0[i]); i++) {  skipEvents['on'+type] = true;  }
-
-
   // Internal function to quickly bind DOM Level 2 events.
   var addEventListenerOnConfig = function (vElm, attr) {
           var evts = vElm.µEvents;
@@ -153,6 +145,7 @@ module.exports = function(m){
 
   var attrHandlers = {};
 
+  var docElm = document.documentElement;
 
   var µ = function (tagName) {
           var vElm = m.apply(undefined, arguments);
@@ -189,7 +182,8 @@ module.exports = function(m){
                   vElm = replacement;
                 }
                 // CAVEAT: attributes added by transformers functions
-                // will not be transformed. (Except on{event} attributes.)
+                // will not be transformed -
+                // with the notable exception of on{event} attributes.)
               }
             }
             // Properly bind event types that require DOM Level 2 event binding
@@ -199,11 +193,11 @@ module.exports = function(m){
             for (attrName in vElm.attrs)
             {
               if (
-                  // not listed as safe for mithril's simplistic event property handling
-                  !skipEvents[attrName]  &&
+                  // not safe as DOM Level 0 event
+                  !( attrName in docElm ) &&
                   // not handled already by custom transformation above.
                   !attrHandlers[attrName]  &&
-                  // starts with 'on'
+                  // actually starts with 'on' (checked last to minimize cycles)
                   attrName.substr(0,2)==='on'
                 )
               {
