@@ -11,7 +11,12 @@
   Utilities:
 
     * `µ.attrs` –
-      container for attitbute value transformer functions.
+      container for your attitbute transformer functions, like so:
+
+          µ.attrs.foobar= function (vElm, foobarAttrValue, attrs) {
+              attrs.onclick = function (e) { alert('Foobar!'); };
+              console.log( attrs === vElm.attrs ); // -> true
+            };
 
     * `µ.onUnload( vElm_or_ctx, callback[] )` –
       Safely queues `callback` for execution on `ctx.onunload`
@@ -29,7 +34,7 @@
       automatically unbind them on `ctx.onunload`
 
   Usage:
-  
+
       var m = require('mithril');
       var µ = require('./mu.js')(m);
       // ... then use µ() in place of m() where super-powers are required.
@@ -146,16 +151,7 @@ module.exports = function(m){
 
 
 
-
-  // Add custom attribute handlers here....
-  var attrHandlers = {
-        /*
-          foobar: function (vElm, foobarAttrValue, attrs) {
-              attrs.onclick = function (e) { alert('Foobar!'); };
-              console.log( attrs === vElm.attrs ); // -> true
-            },
-        */
-        };
+  var attrHandlers = {};
 
 
   var µ = function (tagName) {
