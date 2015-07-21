@@ -1,5 +1,5 @@
 /*
-  µ (Mu) is an unobtrusive, lightweight function wrapper around
+  µ (mu) is an unobtrusive, lightweight function wrapper around
   mithril's `m()` function. It also exposes a few utility functions.
 
   `µ()` is a drop-in replacement for `m()` adding these features:
@@ -13,7 +13,7 @@
     * `µ.attrs` –
       container for your attitbute transformer functions, like so:
 
-          µ.attrs.foobar= function (vElm, foobarAttrValue, attrs) {
+          µ.attrs.foobar = function (vElm, foobarAttrValue, attrs) {
               attrs.onclick = function (e) { alert('Foobar!'); };
               console.log( attrs === vElm.attrs ); // -> true
             };
@@ -36,11 +36,14 @@
   Usage:
 
       var m = require('mithril');
-      var µ = require('./mu.js')(m);
-      // ... then use µ() in place of m() where super-powers are required.
+      var µ = require('./mu.js')(m, myAttrTransforms);
+      console.log( µ.attrs === myAttrTransforms ); // true
+
+      // ... then use µ() in place of m() where super-powers are needed.
 
 */
-module.exports = function(m){
+module.exports = function(m, attrHandlers){
+  attrHandlers = attrHandlers || {};
 
   // Safe adding of config functions to vElm.attrs
   var onBuild = function (vElm, configFn) {
@@ -142,8 +145,6 @@ module.exports = function(m){
         };
 
 
-
-  var attrHandlers = {};
 
   var docElm = document.documentElement;
 
