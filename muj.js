@@ -31,7 +31,7 @@
 */
 module.exports = function(m){
 
-  // Safe adding config functions to vElm.attrs
+  // Safe adding of config functions to vElm.attrs
   var onBuild = function (vElm, configFn) {
           var oldConfigFn = vElm.attrs.config;
           vElm.attrs.config = oldConfigFn ?
@@ -54,7 +54,7 @@ module.exports = function(m){
               configFn;
         };
 
-  // Safely add onunload funcs to ctx
+  // Safely add onunload funcs to an vElm's ctx
   var onUnload = function (vElm_or_ctx, callback) {
           var vElm = vElm_or_ctx.tag  &&  vElm_or_ctx.attrs  &&  vElm_or_ctx;
           if ( vElm )
@@ -88,24 +88,24 @@ module.exports = function(m){
 
   // Sugar function to add DOM events to target objects/nodes
   // and remove them when the source element is unloaded
-  var onEvent = function (vElm_or_ctx, target, eventType, handler) {
-          target.addEventListener(eventType, handler);
+  var onEvent = function (vElm_or_ctx, target, eventType, handler, useCapture) {
+          target.addEventListener(eventType, handler, useCapture);
           onUnload(vElm_or_ctx, function(){
-              target.removeEventListener(eventType, handler);
+              target.removeEventListener(eventType, handler, useCapture);
             });
         };
 
 
 
-  // FIXME: add more 'safe' events to this list
+  // FIXME: add more "safe-for-DOM-level-0" events to this list
   var domLevel0 = ('click,dblclick,mouseover,mousedown,mousemove,focus,blur,'+
-                    'keyup,keydown,keypress,submit,reset,scroll,change').split(',');
+                   'keyup,keydown,keypress,submit,reset,scroll,change').split(',');
   // Look-up object with names of domLevel0 events that don't require .addEventListener() binding
   var skipEvents = {};
   for (var i=0, type; (type = domLevel0[i]); i++) {  skipEvents['on'+type] = true;  }
 
 
-  // Internal function to quickly bind/unbind DOM Level 1 events.
+  // Internal function to quickly bind/unbind DOM Level 2 events.
   var addEventListenerOnConfig = function (vElm, attr) {
           var evts = vElm.µEvents;
           if ( !evts )
@@ -121,15 +121,18 @@ module.exports = function(m){
                   elm.addEventListener( type, handler );
                   // Remove the element attribute/property to avoid double triggering
                   elm[attr] = undefined;
-                  evts[type] = handler;
+                  // evts[type] = handler;
                 }
-                // // FIXME: find out if unbinding is still needed to guard against memory leaks...
-                // onUnload(ctx, () => {
-                //     for (var type in evts)
-                //     {
-                //       elm.removeEventListener( type, evts[type] );
-                //     }
-                //   });
+              /*
+                // FIXME: Is unbinding still needed to guard against memory leaks
+                // in the post IE8 world...?
+                onUnload(ctx, function () {
+                    for (var type in evts)
+                    {
+                      elm.removeEventListener( type, evts[type] );
+                    }
+                  });
+              */
               });
           }
           evts[ attr.substr(2) ] = attr;
@@ -138,16 +141,18 @@ module.exports = function(m){
 
 
 
+  // Add custom attribute handlers here....
   var attrHandlers = {
-          // // optionally add custom attribute handlers here....
-          // foobar: (vElm, foobarAttrValue, attrs) => {
-          //     attrs.onclick = function (e) { alert('Foobar!'); };
-          //     console.log( attrs === vElm.attrs ); // -> true
-          //   }
+        /*
+          foobar: function (vElm, foobarAttrValue, attrs) {
+              attrs.onclick = function (e) { alert('Foobar!'); };
+              console.log( attrs === vElm.attrs ); // -> true
+            },
+        */
         };
 
 
-  var µ = (tagName) => {
+  var µ = function (tagName) {
           var vElm = m.apply(undefined, arguments);
           if ( tagName === null )
           {
@@ -184,7 +189,7 @@ module.exports = function(m){
                 // will not be transformed. (Except on{event} attributes.)
               }
             }
-            // Properly bind event types that require DOM Level 1 event binding
+            // Properly bind event types that require DOM Level 2 event binding
             // See: https://github.com/lhorie/mithril.js/issues/574
             // (NOTE: do this in separate loop as custom attribute
             // handlers might have added new event handlers.)
