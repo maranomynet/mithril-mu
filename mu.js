@@ -67,7 +67,7 @@ module.exports = function(m){
 
   // Safely add onunload funcs to an vElm's ctx
   var onUnload = function (vElm_or_ctx, callback) {
-          var vElm = vElm_or_ctx.tag  &&  vElm_or_ctx.attrs  &&  vElm_or_ctx;
+          var vElm = (vElm_or_ctx.tag  &&  vElm_or_ctx.attrs)  ?  vElm_or_ctx : null;
           if ( vElm )
           {
             onBuild(vElm, function(e, r, ctx) {
