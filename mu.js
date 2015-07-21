@@ -1,5 +1,5 @@
 /*
-  Muj is an unobtrusive, lightweight function wrapper for
+  Mu is an unobtrusive, lightweight function wrapper for
   mithril's `m()` function, and exposes a few utility functions.
 
   `µ()` provides:
@@ -27,6 +27,12 @@
     * `µ.addEvent( vElm_or_ctx, target, eventType, handler[e] )` –
       Binds `handler` to `eventType` on `target` and
       automatically unbind them on `ctx.onunload`
+
+  Usage:
+  
+      var m = require('mithril');
+      var µ = require('./mu.js')(m);
+      // ... then use µ() in place of m() where super-powers are required.
 
 */
 module.exports = function(m){
