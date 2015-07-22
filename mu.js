@@ -9,6 +9,14 @@
     * Binds DOM events via `.addEventListener()` when neccessary.
     * Allows opting-out of element wrapping via `µ( cond?'.wrapper':null, m('p','content') )`
 
+  Usage:
+
+      var m = require('mithril');
+      var µ = require('./mu.js')(m, myAttrTransforms);
+      console.log( µ.attrs === myAttrTransforms ); // true
+
+      // ... then use µ() in place of m() where super-powers are needed.
+
 
   Utilities:
 
@@ -46,14 +54,6 @@
       and optionally setting `m.redraw.strategy('none')`
 
 
-
-  Usage:
-
-      var m = require('mithril');
-      var µ = require('./mu.js')(m, myAttrTransforms);
-      console.log( µ.attrs === myAttrTransforms ); // true
-
-      // ... then use µ() in place of m() where super-powers are needed.
 
 */
 
