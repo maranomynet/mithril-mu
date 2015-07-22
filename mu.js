@@ -53,9 +53,9 @@
       Wraps `func` in an event handler, doing `e.preventDefault()`
       and optionally setting `m.redraw.strategy('none')`
 
-
-
 */
+
+var µNoop = function(){};
 
 module.exports = function(m, transformers){
   transformers = transformers || {};
@@ -64,7 +64,7 @@ module.exports = function(m, transformers){
   // Safe adding of config functions to vElm.attrs
   var onBuild = function (vElm, configFn) {
           var oldConfigFn = vElm.attrs.config;
-          vElm.attrs.config = oldConfigFn ?
+          vElm.attrs.config = oldConfigFn  &&  oldConfigFn !== µNoop ?
               function ( elm, isRedraw, ctx ) {
                   oldConfigFn( elm, isRedraw, ctx );
                   !isRedraw  &&  configFn( elm, isRedraw, ctx );
@@ -76,7 +76,7 @@ module.exports = function(m, transformers){
   var onRedraw = function (vElm, configFn) {
           var attrs = vElm.attrs;
           var oldConfigFn = attrs.config;
-          attrs.config = oldConfigFn ?
+          attrs.config = oldConfigFn  &&  oldConfigFn !== µNoop ?
               function ( elm, isRedraw, ctx ) {
                   oldConfigFn  &&  oldConfigFn( elm, isRedraw, ctx );
                   configFn( elm, isRedraw, ctx );
@@ -145,9 +145,9 @@ module.exports = function(m, transformers){
             evts = vElm.µEvents = {};
             evtNames = vElm.µEventsNames = '';
             onRedraw(vElm, function (elm, isRedraw, ctx) {
-                var lastEvts = ctx.µLastEvents || {};
                 if ( evtNames !== ctx.µLastEventNames )
                 {
+                  var lastEvts = ctx.µLastEvents || {};
                   var type;
                   // Look for deleted event attributes
                   for (type in lastEvts)
@@ -233,6 +233,14 @@ module.exports = function(m, transformers){
               addEventListenerOnConfig( vElm, attrName );
             }
           }
+
+          // DOM Level 2 event supprt requires dynamically adding a config function.
+          // If such event attributes are added after the element was first initialized
+          // it may result in a config function appearing all of a sudden, and thereby
+          // throwing Mithril's diff engine into total rewrite/rebuild of the DOM element.
+          // And accidental/sporadic rebuilds kill pretty CSS transformations.
+          // Thus we bind this no-op function by default.
+          attrs.config = attrs.config || µNoop;
 
           return vElm;
         };
