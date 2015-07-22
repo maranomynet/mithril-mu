@@ -196,6 +196,7 @@ module.exports = function(m, transformers){
               // accidentally polluting the DOM.
               // Transformers must explicitly re-assign their own attribute value
               // if they want to see it in the DOM.
+              // NOTE: This deviates from Barney Carroll's mattr behaviour.
               delete attrs[attrName];
               // run the transformation.
               var replacement = transformers[attrName](vElm, attrValue, attrs);
@@ -204,7 +205,10 @@ module.exports = function(m, transformers){
               // and thus opt out of the current transformation process
               if ( replacement !== undefined )
               {
+                // NOTE: Here, again, we deviate from Barney Carroll's mattr
+                // - which blindly continues the loop
                 return replacement;
+                // vElm = replacement;
               }
               // CAVEAT: attributes added by transformers functions
               // will not be transformed -
