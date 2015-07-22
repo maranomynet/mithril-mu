@@ -55,8 +55,6 @@
 
 */
 
-var µNoop = function(){};
-
 module.exports = function(m, transformers){
   transformers = transformers || {};
 
@@ -64,7 +62,7 @@ module.exports = function(m, transformers){
   // Safe adding of config functions to vElm.attrs
   var onBuild = function (vElm, configFn) {
           var oldConfigFn = vElm.attrs.config;
-          vElm.attrs.config = oldConfigFn  &&  oldConfigFn !== µNoop ?
+          vElm.attrs.config = oldConfigFn ?
               function ( elm, isRedraw, ctx ) {
                   oldConfigFn( elm, isRedraw, ctx );
                   !isRedraw  &&  configFn( elm, isRedraw, ctx );
@@ -76,7 +74,7 @@ module.exports = function(m, transformers){
   var onRedraw = function (vElm, configFn) {
           var attrs = vElm.attrs;
           var oldConfigFn = attrs.config;
-          attrs.config = oldConfigFn  &&  oldConfigFn !== µNoop ?
+          attrs.config = oldConfigFn ?
               function ( elm, isRedraw, ctx ) {
                   oldConfigFn  &&  oldConfigFn( elm, isRedraw, ctx );
                   configFn( elm, isRedraw, ctx );
@@ -127,9 +125,10 @@ module.exports = function(m, transformers){
 
   // Sugar to quickly return a event handler that does
   // .preventDefault() and optionally halts redraw
-  var makeClickHandler = function (fn, noRedraw) {
+  var makeClickHandler = function (fn, noRedraw, stopPropagation) {
           return function (e) {
               e.preventDefault();
+              stopPropagation && e.stopPropagation();
               noRedraw && m.redraw.strategy('none');
               fn.call(this, e);
             };
@@ -190,7 +189,7 @@ module.exports = function(m, transformers){
           for (attrName in attrs)
           {
             var attrValue = attrs[attrName];
-            if ( transformers[attrName]  &&  attrValue != null )
+            if ( transformers[attrName] )
             {
               // Delete transformed attributes - to avoid custom-attribute gunk
               // accidentally polluting the DOM.
@@ -239,8 +238,8 @@ module.exports = function(m, transformers){
           // it may result in a config function appearing all of a sudden, and thereby
           // throwing Mithril's diff engine into total rewrite/rebuild of the DOM element.
           // And accidental/sporadic rebuilds kill pretty CSS transformations.
-          // Thus we bind this no-op function by default.
-          attrs.config = attrs.config || µNoop;
+          // Thus we make sure there's `"config" in attrs` - even just an undefined one.
+          attrs.config = attrs.config;
 
           return vElm;
         };
