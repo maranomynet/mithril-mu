@@ -196,8 +196,6 @@ module.exports = function(m, attrHandlers){
               if (
                   // not safe as DOM Level 0 event
                   !( attrName in docElm ) &&
-                  // not handled already by custom transformation above.
-                  !attrHandlers[attrName]  &&
                   // actually starts with 'on' (checked last to minimize cycles)
                   attrName.substr(0,2)==='on'
                 )
