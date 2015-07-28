@@ -105,11 +105,11 @@ In which `div.box` will alert first 'Hi all!' and then 'Hello World!' when click
     Safely queues `configFn` for execution via `vElm.attrs.config` 
     on every m.redraw()
 
-  * **`µ.addEvent( vElm_or_ctx, target, eventType, handler[e] )`** <br/>
+  * **`µ.addEvent( vElm_or_ctx, target, eventType, handler[e], useCapture )`** <br/>
     Sugar to bind `handler` to `eventType` on `target` and automatically
     unbind it on `ctx.onunload`.
 
-  * **`µ.click( func[e], noRedraw )`** <br/>
+  * **`µ.click( func, noRedraw, stopPropagation )`** <br/>
     Sugar to wrap a plain `func` as an event handler, doing 
     `e.preventDefault()` and optionally setting `m.redraw.strategy('none')`
 

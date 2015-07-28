@@ -71,13 +71,13 @@ module.exports = function(m, transformers){
         };
 
   // Sugar to quickly return a event handler that does
-  // .preventDefault() and optionally halts redraw
-  var makeClickHandler = function (fn, noRedraw, stopPropagation) {
+  // .preventDefault() and optionally prevents redraw
+  var makeClickHandler = function (func, noRedraw, stopPropagation) {
           return function (e) {
               e.preventDefault();
               stopPropagation && e.stopPropagation();
               noRedraw && m.redraw.strategy('none');
-              fn.call(this, e);
+              func.call(this);
             };
         };
 
