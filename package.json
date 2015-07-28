@@ -1,0 +1,29 @@
+{
+  "name": "mithril-mu",
+  "version": "0.1.0",
+  "description": "µ is an unobtrusive, lightweight function wrapper around mithril's `m()` function.",
+  "main": "mu.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:maranomynet/mithril-mu.git"
+  },
+  "keywords": [
+    "mithril",
+    "plugin",
+    "custom",
+    "attributes",
+    "events",
+    "view",
+    "wrapper"
+  ],
+  "author": "Hugsmiðjan ehf. <hugsmidjan@hugsmidjan.is> (http://www.hugsmidjan.is/)",
+  "contributors": ["Már Örlygsson <mar.nospam@anomy.net> (http://mar.anomy.net/)"],
+  "license": "MIT / GPL-2.0+",
+  "bugs": {
+    "url": "https://github.com/maranomynet/mithril-mu/issues"
+  },
+  "homepage": "https://github.com/maranomynet/mithril-mu"
+}
