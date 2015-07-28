@@ -1,59 +1,6 @@
-/*
-  µ (mu) is an unobtrusive, lightweight function wrapper around
-  mithril's `m()` function. It also exposes a few utility functions.
-
-  `µ()` is a drop-in replacement for `m()` adding these features:
-
-    * Support for custom attribute transormations (similar to Barney Carroll's `mattr`)
-      (add your own via `µ.attrs.customAttr = myTransformFn`)
-    * Binds DOM events via `.addEventListener()` when neccessary.
-    * Allows opting-out of element wrapping via `µ( cond?'.wrapper':null, m('p','content') )`
-
-  Usage:
-
-      var m = require('mithril');
-      var µ = require('./mu.js')(m, myAttrTransforms);
-      console.log( µ.attrs === myAttrTransforms ); // true
-
-      // ... then use µ() in place of m() where super-powers are needed.
-
-
-  Utilities:
-
-    * `µ.attrs` –
-      container for your attitbute transformer functions, like so:
-
-          µ.attrs.foobar = function (vElm, foobarAttrValue, attrs) {
-              attrs.onclick = function (e) { alert('Foobar!'); };
-              console.log( attrs === vElm.attrs ); // -> true
-            };
-
-    * `µ.transform( vElm )` –
-      Performs post-hoc transformation on existing vElms.
-
-          var vanillaElm = m('p', { ontransitionend:myFunc }, 'Content');
-          var shinyElm = µ.transform( vanillaElm );
-
-    * `µ.onUnload( vElm_or_ctx, callback[] )` –
-      Safely queues `callback` for execution on `ctx.onunload`
-
-    * `µ.onBuild( vElm, configFn[elm,isRedraw,ctx] )` –
-      Safely queues `configFn` for execution via `vElm.attrs.config`
-      when `isRedraw === false` (on element initialization)
-
-    * `µ.onRedraw( vElm, configFn[elm,isRedraw,ctx] )` –
-      Safely queues `configFn` for execution via `vElm.attrs.config`
-      on every m.redraw()
-
-    * `µ.addEvent( vElm_or_ctx, target, eventType, handler[e] )` –
-      Binds `handler` to `eventType` on `target` and
-      automatically unbind them on `ctx.onunload`
-
-    * `µ.click( func[e], noRedraw )` –
-      Wraps `func` in an event handler, doing `e.preventDefault()`
-      and optionally setting `m.redraw.strategy('none')`
-
-*/
+/* Mithril µ/mu wrapper --  ©2015 Hugsmiðjan ehf.   @license MIT/GPL */
+// Dual licensed under a MIT licence (http://en.wikipedia.org/wiki/MIT_License)
+// and GPL 2.0 or above (http://www.gnu.org/licenses/old-licenses/gpl-2.0.html).
 
 module.exports = function(m, transformers){
   transformers = transformers || {};
