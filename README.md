@@ -64,7 +64,7 @@ var myView = function ( ctrl ) {
 };
 ```
 
-In which `div.box` will alert first 'Hi all!' and then 'Hello World!' when clicked, and the `<input>` will automatically have the value `ctrl.inputText`, and update it on input.
+In which `div.box` will alert first 'Hi all!' and then 'Hello World!' when clicked, and the `<input>` will automatically show the value `ctrl.inputText`, and update it on input.
 
 **Notes:**
 
@@ -90,8 +90,8 @@ In which `div.box` will alert first 'Hi all!' and then 'Hello World!' when click
     Performs post-hoc attr transformation, and DOM Level 2 binding on existing vElms.
 
     ```js
-        var vanillaElm = m('p', { ontransitionend:myFunc }, 'Content');
-        var shinyElm = µ.transform( vanillaElm );
+    var vanillaElm = m('p', { ontransitionend:myFunc }, 'Content');
+    var shinyElm = µ.transform( vanillaElm );
     ```
 
   * **`µ.onUnload( vElm_or_ctx, callback[] )`** <br/>
