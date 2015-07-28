@@ -5,7 +5,7 @@ mithril's `m()` function.
 
 `µ()` is a drop-in replacement for `m()` adding these features:
 
-  * Support for custom attribute transformations (similar to [Barney Carroll's `mattr`][1]).
+  * Support for custom attribute transformations (similar to Barney Carroll's [`mattr`][1]).
   * Binds DOM events via `.addEventListener()` when [neccessary][2].
   * Allows [opting-out of element wrapping][3] via `µ( cond?'.wrapper':null, m('p','content') )`
 
@@ -64,6 +64,8 @@ var myView = function ( ctrl ) {
 };
 ```
 
+In which `div.box` will alert first 'Hi all!' and then 'Hello World!' when clicked, and the `<input>` will automatically have the value `ctrl.inputText`, and update it on input.
+
 **Notes:**
 
  1. The transformed attribute is removed from the virtual element's `attrs` map to keep the rendered DOM as clean as possible. If you do want the attribute to appear in the DOM, you must explicitly add it back to the `attrs` object – like so:
@@ -76,14 +78,15 @@ var myView = function ( ctrl ) {
     }
     ```
 
- 2. If a transformation function returns a value other than `undefined`, that value replaces the original virtual element and no further processing is performed on it. Thus you should avoid writing transformations that cause immediate side-effects outside the virtual-element itself or its `attrs`, as the virtual-element might never land in the DOM, or have it's `onunload` called.)
+ 2. A Transformation function may return a value other than `undefined`, which instantly replaces the original virtual element, and no further processing is performed. (See [discussion][4].) Thus you should avoid writing transformations that cause immediate side-effects outside the virtual-element itself or its `attrs`, as the virtual-element might never land in the DOM, or have it's `onunload` called.
 
+[4]: https://github.com/barneycarroll/mattr/issues/2
 
 ##  Utilities:
 
 µ comes with a few helpful utilities:
 
-  * `µ.transform( vElm )` –
+  * **`µ.transform( vElm )`** <br/>
     Performs post-hoc attr transformation, and DOM Level 2 binding on existing vElms.
 
     ```js
@@ -91,22 +94,22 @@ var myView = function ( ctrl ) {
         var shinyElm = µ.transform( vanillaElm );
     ```
 
-  * `µ.onUnload( vElm_or_ctx, callback[] )` –
+  * **`µ.onUnload( vElm_or_ctx, callback[] )`** <br/>
     Safely queues `callback` for execution on `ctx.onunload`
 
-  * `µ.onBuild( vElm, configFn[elm,isRedraw,ctx] )` –
+  * **`µ.onBuild( vElm, configFn[elm,isRedraw,ctx] )`** <br/>
     Safely queues `configFn` for execution via `vElm.attrs.config`
     when `isRedraw === false` (on element initialization)
 
-  * `µ.onRedraw( vElm, configFn[elm,isRedraw,ctx] )` –
+  * **`µ.onRedraw( vElm, configFn[elm,isRedraw,ctx] )`** <br/>
     Safely queues `configFn` for execution via `vElm.attrs.config` 
     on every m.redraw()
 
-  * `µ.addEvent( vElm_or_ctx, target, eventType, handler[e] )` –
+  * **`µ.addEvent( vElm_or_ctx, target, eventType, handler[e] )`** <br/>
     Sugar to bind `handler` to `eventType` on `target` and automatically
     unbind it on `ctx.onunload`.
 
-  * `µ.click( func[e], noRedraw )` –
+  * **`µ.click( func[e], noRedraw )`** <br/>
     Sugar to wrap a plain `func` as an event handler, doing 
     `e.preventDefault()` and optionally setting `m.redraw.strategy('none')`
 
