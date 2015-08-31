@@ -149,7 +149,7 @@ module.exports = function(m, transformers){
               // Allow attribute transformers to return a new element
               // (or text-node or a subtree:retain directive).
               // and thus opt out of the current transformation process
-              if ( replacement !== undefined )
+              if ( replacement !== undefined  &&  replacement !== vElm )
               {
                 // NOTE: Here, again, we deviate from Barney Carroll's mattr
                 // - which blindly continues the loop
