@@ -158,7 +158,8 @@ module.exports = function(m, transformers){
               }
               // CAVEAT: attributes added by transformers functions
               // will not be transformed -
-              // with the notable exception of on{event} attributes.)
+              // with the notable exception of on{event} attributes -
+              // as those are handled in a separate loop below.)
             }
           }
           // Properly bind event types that require DOM Level 2 event binding
