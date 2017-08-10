@@ -1,6 +1,6 @@
 {
   "name": "mithril-mu",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "µ is an unobtrusive, lightweight function wrapper around mithril's `m()` function.",
   "main": "mu.js",
   "scripts": {
