@@ -60,7 +60,7 @@ In which `div.box` will alert first 'Hi all!' and then 'Hello World!' when click
 
 **Notes:**
 
- 1. The transformed attribute is removed from the virtual element's `attrs` map to keep the rendered DOM as clean as possible. If you do want the attribute to appear in the DOM, you must explicitly add it back to the `attrs` object – like so:
+ 1. The transformed attribute is removed from the virtual node's `attrs` map to keep the rendered DOM as clean as possible. If you do want the attribute to appear in the DOM, you must explicitly add it back to the `attrs` object – like so:
 
     ```js
     µ.attrs.onclick = function (vnode, handler, attrs) {
@@ -70,17 +70,17 @@ In which `div.box` will alert first 'Hi all!' and then 'Hello World!' when click
     }
     ```
 
- 2. A Transformation function may return a value other than `undefined`, which instantly replaces the original virtual element, and no further processing is performed. (See [discussion][4].) Thus you should avoid writing transformations that cause immediate side-effects outside the virtual-element itself or its `attrs`, as the virtual-element might never land in the DOM, or have it's `onunload` called.
+ 2. A Transformation function may return a value other than `undefined`, which instantly replaces the original virtual node, and no further processing is performed. (See [discussion][4].) Thus you should avoid writing transformations that cause immediate side-effects outside the virtual-node itself or its `attrs`, as the original virtual-node might never land in the DOM, or have it's `onremove` called.
 
 [4]: https://github.com/barneycarroll/mattr/issues/2
 
 ##  Utilities:
 
   * **`µ.transform( vnode )`** <br/>
-    Performs post-hoc attr transformation, and DOM Level 2 binding on existing vnodes.
+    Performs post-hoc attr transformation on an existing vnode.
 
     ```js
-    var vanillaElm = m('p', { ontransitionend:myFunc }, 'Content');
-    var shinyElm = µ.transform( vanillaElm );
+    var vanillaVnode = m('p', { ontransitionend:myFunc }, 'Content');
+    var shinyVnode = µ.transform( vanillaVnode );
     ```
 
