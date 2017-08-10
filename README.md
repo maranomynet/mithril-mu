@@ -1,7 +1,7 @@
 # µ (mu)
 
 µ is an unobtrusive, lightweight function wrapper around
-mithril's `m()` function.
+mithril 0.2's `m()` function.
 
 `µ()` is a drop-in replacement for `m()` adding these features:
 
